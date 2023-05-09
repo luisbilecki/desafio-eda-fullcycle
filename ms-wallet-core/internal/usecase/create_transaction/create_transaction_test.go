@@ -4,10 +4,10 @@ import (
 	"context"
 	"testing"
 
-	"github.com.br/luisbilecki/fullcycle-eda/internal/entity"
-	"github.com.br/luisbilecki/fullcycle-eda/internal/event"
-	"github.com.br/luisbilecki/fullcycle-eda/internal/usecase/mocks"
-	"github.com.br/luisbilecki/fullcycle-eda/pkg/events"
+	"github.com.br/luisbilecki/desafio-eda-fullcycle/ms-wallet-core/internal/entity"
+	"github.com.br/luisbilecki/desafio-eda-fullcycle/ms-wallet-core/internal/event"
+	"github.com.br/luisbilecki/desafio-eda-fullcycle/ms-wallet-core/internal/usecase/mocks"
+	"github.com.br/luisbilecki/desafio-eda-fullcycle/ms-wallet-core/pkg/events"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )

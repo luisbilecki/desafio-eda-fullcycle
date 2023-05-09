@@ -3,8 +3,8 @@ package create_client
 import (
 	"time"
 
-	"github.com.br/luisbilecki/fullcycle-eda/internal/entity"
-	"github.com.br/luisbilecki/fullcycle-eda/internal/gateway"
+	"github.com.br/luisbilecki/desafio-eda-fullcycle/ms-wallet-core/internal/entity"
+	"github.com.br/luisbilecki/desafio-eda-fullcycle/ms-wallet-core/internal/gateway"
 )
 
 type CreateClientInputDTO struct {

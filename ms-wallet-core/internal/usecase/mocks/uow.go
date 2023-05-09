@@ -3,7 +3,7 @@ package mocks
 import (
 	"context"
 
-	"github.com.br/luisbilecki/fullcycle-eda/pkg/uow"
+	"github.com.br/luisbilecki/desafio-eda-fullcycle/ms-wallet-core/pkg/uow"
 	"github.com/stretchr/testify/mock"
 )
 

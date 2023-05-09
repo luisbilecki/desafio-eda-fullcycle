@@ -1,4 +1,4 @@
-module github.com.br/luisbilecki/fullcycle-eda
+module github.com.br/luisbilecki/desafio-eda-fullcycle/ms-wallet-core
 
 go 1.19
 

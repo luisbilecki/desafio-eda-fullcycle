@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com.br/luisbilecki/fullcycle-eda/internal/usecase/create_account"
+	"github.com.br/luisbilecki/desafio-eda-fullcycle/ms-wallet-core/internal/usecase/create_account"
 )
 
 type WebAccountHandler struct {
