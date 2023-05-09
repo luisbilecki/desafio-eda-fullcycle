@@ -5,6 +5,9 @@ import (
 	"database/sql"
 	"fmt"
 
+	"github.com/golang-migrate/migrate/v4"
+	mysqlMigrate "github.com/golang-migrate/migrate/v4/database/mysql"
+
 	"github.com.br/luisbilecki/desafio-eda-fullcycle/ms-wallet-core/internal/database"
 	"github.com.br/luisbilecki/desafio-eda-fullcycle/ms-wallet-core/internal/event"
 	"github.com.br/luisbilecki/desafio-eda-fullcycle/ms-wallet-core/internal/event/handler"
@@ -18,6 +21,7 @@ import (
 	"github.com.br/luisbilecki/desafio-eda-fullcycle/ms-wallet-core/pkg/uow"
 	ckafka "github.com/confluentinc/confluent-kafka-go/kafka"
 	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 )
 
 func main() {
@@ -26,6 +30,8 @@ func main() {
 		panic(err)
 	}
 	defer db.Close()
+
+	migrateDatabase(db)
 
 	configMap := ckafka.ConfigMap{
 		"bootstrap.servers": "kafka:29092",
@@ -69,4 +75,18 @@ func main() {
 
 	fmt.Println("Server is running")
 	webserver.Start()
+}
+
+func migrateDatabase(db *sql.DB) {
+	driver, err := mysqlMigrate.WithInstance(db, &mysqlMigrate.Config{})
+	if err != nil {
+		panic(err)
+	}
+	m, err := migrate.NewWithDatabaseInstance(
+		"file://migrations",
+		"wallet", driver)
+	if err != nil {
+		panic(err)
+	}
+	m.Up()
 }

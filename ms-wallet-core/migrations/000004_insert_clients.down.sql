@@ -1,0 +1,1 @@
+DELETE FROM clients WHERE id IN ('715e1640-caf6-4c2e-909d-17b5c5bc74b1', '30f99dcc-dd88-4f7c-8d32-7c795d5bbccb');
