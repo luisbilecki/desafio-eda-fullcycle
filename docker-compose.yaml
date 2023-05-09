@@ -1,25 +1,27 @@
 version: '3'
 
 services:
-  goapp: 
-    build: .
-    platform: linux/amd64
-    volumes:
-      - .:/app
-    ports:
-      - 8080:8080
-
-  mysql:
-    image: mysql:5.7
-    platform: linux/amd64
+  wallet-db:
+    image: mysql:8
+    container_name: wallet-db
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: wallet
       MYSQL_PASSWORD: root
     ports:
       - 3306:3306
+
+  wallet-app: 
+    container_name: wallet-app
+    build: 
+      context: ./ms-wallet-core                 
     volumes:
-      - .docker/mysql:/var/lib/mysql
+      - ./ms-wallet-core:/app
+    ports:
+      - 8080:8080
+    depends_on:
+      - wallet-db
+    command: sh -c "dockerize -wait tcp://wallet-db:3306 -timeout 240s -wait-retry-interval 2s && go run cmd/walletcore/main.go -b 0.0.0.0"
 
   zookeeper:
     image: "confluentinc/cp-zookeeper:6.1.0"
@@ -37,10 +39,7 @@ services:
     depends_on:
       - zookeeper
     ports:
-    # Exposes 9092 for external connections to the broker
-    # Use kafka:29092 for connections internal on the docker network
-    # See https://rmoff.net/2018/08/02/kafka-listeners-explained/ for details
-      - '9092:9092'
+      - 9092:9092
     environment:
       TZ: Sao_Paulo/Brazil
       KAFKA_BROKER_ID: 1
@@ -55,6 +54,17 @@ services:
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 100
       CONFLUENT_METRICS_ENABLE: 'false'
 
+  kafka-topics-generator:
+    image: "confluentinc/cp-enterprise-kafka:6.1.0"
+    depends_on:
+      - kafka
+    command: >
+      bash -c 
+        "sleep 10s &&
+        kafka-topics --create --topic=accounts --if-not-exists --bootstrap-server=kafka:29092 &&
+        kafka-topics --create --topic=transactions --if-not-exists --bootstrap-server=kafka:29092 &&
+        kafka-topics --create --topic=balances --if-not-exists --bootstrap-server=kafka:29092"    
+
   control-center:
     image: confluentinc/cp-enterprise-control-center:7.3.0
     hostname: control-center
@@ -62,7 +72,7 @@ services:
     depends_on:
       - kafka
     ports:
-      - "9021:9021"
+      - 9021:9021
     environment:
       CONTROL_CENTER_BOOTSTRAP_SERVERS: 'kafka:29092'
       CONTROL_CENTER_REPLICATION_FACTOR: 1
@@ -70,4 +80,3 @@ services:
       CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_PARTITIONS: 1
       CONFLUENT_METRICS_TOPIC_REPLICATION: 1
       PORT: 9021
-  
