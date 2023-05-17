@@ -25,7 +25,7 @@ services:
       - 3003:8080
     depends_on:
       - account-db
-    # command: sh -c "dockerize -wait tcp://account-db:3306 -timeout 240s -wait-retry-interval 2s && java -jar app.jar"
+    command: sh -c "dockerize -wait tcp://account-db:3306 -timeout 240s -wait-retry-interval 2s && java -jar balance.jar"
 
   wallet-db:
     image: mysql:8
