@@ -1,0 +1,1 @@
+INSERT INTO accounts (id, client_id, balance, created_at) VALUES('cc8338e5-9210-44bb-a4b4-18a8fa8b9233', '715e1640-caf6-4c2e-909d-17b5c5bc74b1', 100000.00, now()), ('b0eaf769-ec40-4264-9784-7bcc7588cd9a', '30f99dcc-dd88-4f7c-8d32-7c795d5bbccb', 100000.00, now());

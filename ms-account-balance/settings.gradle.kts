@@ -1,1 +1,1 @@
-rootProject.name = "ms-account-balance"
+rootProject.name = "balance"
