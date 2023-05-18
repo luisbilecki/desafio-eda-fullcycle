@@ -1,58 +1,49 @@
-version: '3'
+version: '3.6'
 
 services:
   account-db:
-    image: mysql:8
-    platform: linux/amd64
+    image: postgres:13.1-alpine
     container_name: account-db
-    extra_hosts:
-      - "host.docker.internal:172.17.0.1"
+    restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: account
-      MYSQL_PASSWORD: root
-      MYSQL_ROOT_HOST: "%"
+      POSTGRES_DB: account
+      POSTGRES_USER: account
+      POSTGRES_PASSWORD: password
     ports:
-      - 3307:3306
+      - 5432:5432
 
   account-app: 
     container_name: account-app
     build: 
-      context: ./ms-account-balance  
-    extra_hosts:
-      - "host.docker.internal:172.17.0.1"          
+      context: ./ms-account-balance       
     ports:
       - 3003:8080
     depends_on:
       - account-db
-    command: sh -c "dockerize -wait tcp://account-db:3306 -timeout 240s -wait-retry-interval 2s && java -jar balance.jar"
+    command: sh -c "dockerize -wait tcp://account-db:5432 -timeout 240s -wait-retry-interval 2s && java -jar balance.jar"
 
   wallet-db:
-    image: mysql:8
-    platform: linux/amd64
+    image: mysql:5.7
     container_name: wallet-db
-    extra_hosts:
-      - "host.docker.internal:172.17.0.1"
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: wallet
-      MYSQL_PASSWORD: root
-      MYSQL_ROOT_HOST: "%"
+      MYSQL_USER: wallet
+      MYSQL_PASSWORD: password
     ports:
       - 3308:3306
  
   wallet-app: 
     container_name: wallet-app
     build: 
-      context: ./ms-wallet-core  
-    extra_hosts:
-      - "host.docker.internal:172.17.0.1"               
+      context: ./ms-wallet-core            
     volumes:
       - ./ms-wallet-core:/app
     ports:
       - 8080:8080
     depends_on:
-      - wallet-db
+      - wallet-db   
     command: sh -c "dockerize -wait tcp://wallet-db:3306 -timeout 240s -wait-retry-interval 2s && go run cmd/walletcore/main.go -b 0.0.0.0"
 
   zookeeper:
@@ -68,6 +59,7 @@ services:
   kafka:
     image: "confluentinc/cp-kafka:latest"
     container_name: kafka
+    restart: always
     depends_on:
       - zookeeper
     ports:

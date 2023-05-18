@@ -1,4 +1,4 @@
-
+# Cria cliente
 POST http://localhost:8080/clients HTTP/1.1
 Content-Type: application/json
 
@@ -7,17 +7,16 @@ Content-Type: application/json
     "email": "john@j.com"
 }
 
-###
+### Cria conta
 
 POST http://localhost:8080/accounts HTTP/1.1
 Content-Type: application/json
 
 {
-    "client_id": "998fdc71-dff1-4610-b27b-3ccb655e15f4"
+    "client_id": "dce688c6-4cd4-42e1-83d8-190960be1026"
 }
 
-###
-
+### Transação 
 POST http://localhost:8080/transactions HTTP/1.1
 Content-Type: application/json
 
@@ -26,3 +25,9 @@ Content-Type: application/json
     "account_id_to": "b0eaf769-ec40-4264-9784-7bcc7588cd9a",
     "amount": 10
 }
+
+### Exibe saldo da 1a conta
+GET http://localhost:3003/balances/cc8338e5-9210-44bb-a4b4-18a8fa8b9233  HTTP/1.1
+
+### Exibe saldo da 2a conta
+GET http://localhost:3003/balances/b0eaf769-ec40-4264-9784-7bcc7588cd9a HTTP/1.1
