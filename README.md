@@ -11,3 +11,12 @@ E usar o endpoint de balance para consultar o saldo:
 http://localhost:3003/balances/cc8338e5-9210-44bb-a4b4-18a8fa8b9233
 
 Já foram colocados valores para **account_id** que possuem saldo
+
+## Como gerenciar e monitorar o Kafka?
+
+No docker-compose fornecido temos uma instância do control-center.
+Para acessar use:
+```http://localhost:9021/clusters```
+
+Exemplo de mensagens no tópico de transação:
+![](imagens/mensagens-topico.png)
